@@ -1,0 +1,143 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="account-container">
+  <!-- Header Section -->
+  <div class="section-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="pi pi-wallet header-icon"></i>
+        <div>
+          <h2>Gestión de Cuentas</h2>
+          <p class="section-description">Administra las cuentas bancarias de los clientes</p>
+        </div>
+      </div>
+      <button 
+        pButton 
+        type="button" 
+        label="Nueva Cuenta" 
+        icon="pi pi-plus"
+        class="p-button-rounded"
+        (click)="openAddAccountModal()"
+        [disabled]="loading">
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <p-card class="table-card">
+    <ng-template pTemplate="header">
+      <div class="card-header-custom">
+        <i class="pi pi-list"></i>
+        <span>Lista de Cuentas</span>
+      </div>
+    </ng-template>
+
+    <p-table 
+      #dt
+      [value]="accounts" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} cuentas"
+      [rowsPerPageOptions]="[5, 10, 15]"
+      [globalFilterFields]="['accountNumber', 'customerId', 'status']"
+      scrollable="scroll"
+      styleClass="p-datatable-striped">
+      
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input 
+              pInputText 
+              type="text" 
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')" 
+              placeholder="Buscar cuenta..." 
+              class="search-input"/>
+          </span>
+          <button 
+            pButton 
+            type="button" 
+            icon="pi pi-refresh" 
+            class="p-button-text"
+            (click)="loadAccounts()"
+            pTooltip="Recargar"
+            tooltipPosition="bottom">
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="accountNumber">
+            Número de Cuenta 
+            <p-sortIcon field="accountNumber"></p-sortIcon>
+          </th>
+          <th pSortableColumn="customerId">
+            Cliente
+            <p-sortIcon field="customerId"></p-sortIcon>
+          </th>
+          <th pSortableColumn="status">
+            Estado
+            <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th>
+            Acciones
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-account>
+        <tr>
+          <td>
+            <div class="account-number">
+              <i class="pi pi-credit-card"></i>
+              <span>{{ account.accountNumber }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="customer-info">
+              <i class="pi pi-user"></i>
+              <span>{{ getCustomerName(account.customerId) }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(account.status)">
+              {{ getStatusLabel(account.status) }}
+            </span>
+          </td>
+          <td>
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-eye" 
+              class="p-button-rounded p-button-text p-button-info"
+              pTooltip="Ver detalles"
+              tooltipPosition="bottom">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="empty-message">
+            <div class="empty-state">
+              <i class="pi pi-inbox empty-icon"></i>
+              <p>No hay cuentas registradas</p>
+              <button 
+                pButton 
+                type="button" 
+                label="Registrar primera cuenta" 
+                icon="pi pi-plus"
+                class="p-button-outlined"
+                (click)="openAddAccountModal()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

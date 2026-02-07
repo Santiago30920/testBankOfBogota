@@ -1,0 +1,128 @@
+<div class="layout-container">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button 
+          pButton 
+          type="button" 
+          [icon]="sidebarExpanded ? 'pi pi-angle-left' : 'pi pi-bars'"
+          class="p-button-text p-button-rounded menu-toggle"
+          (click)="toggleSidebar()"
+          pRipple>
+        </button>
+        <h1 class="app-title">
+          <i class="pi pi-building"></i>
+          <span class="title-text">Banco Bogotá</span>
+        </h1>
+      </div>
+      <div class="header-center">
+        <span class="header-subtitle">Sistema de Gestión Bancaria</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  @if(isMobile){
+    <p-drawer 
+      [(visible)]="drawerVisible" 
+      position="left"
+      [style]="{width: '280px'}">
+      <ng-template pTemplate="header">
+        <div class="drawer-header">
+          <i class="pi pi-building"></i>
+          <h3>Menú Principal</h3>
+        </div>
+      </ng-template>
+      <nav class="drawer-nav">
+        <ul class="nav-list">
+          <li 
+            class="nav-item" 
+            [class.active]="activeSection === 'customer'"
+            (click)="selectSection('customer')">
+            <i class="pi pi-users nav-icon"></i>
+            <span class="nav-label">Clientes</span>
+          </li>
+          <li 
+            class="nav-item" 
+            [class.active]="activeSection === 'account'"
+            (click)="selectSection('account')">
+            <i class="pi pi-wallet nav-icon"></i>
+            <span class="nav-label">Cuentas</span>
+          </li>
+        </ul>
+      </nav>
+    </p-drawer>
+  }
+
+  <div class="layout-body">
+    <!-- Desktop Sidebar -->
+    @if(!isMobile){
+      <aside 
+        class="sidebar" 
+        [class.expanded]="sidebarExpanded"
+        [class.collapsed]="!sidebarExpanded">
+        <nav class="sidebar-nav">
+          <ul class="nav-list">
+            <li 
+              class="nav-item" 
+              [class.active]="activeSection === 'customer'"
+              (click)="selectSection('customer')"
+              [title]="!sidebarExpanded ? 'Clientes' : ''">
+              <i class="pi pi-users nav-icon"></i>
+              @if(sidebarExpanded){
+                <span class="nav-label">Clientes</span>
+              }
+            </li>
+            <li 
+              class="nav-item" 
+              [class.active]="activeSection === 'account'"
+              (click)="selectSection('account')"
+              [title]="!sidebarExpanded ? 'Cuentas' : ''">
+              <i class="pi pi-wallet nav-icon"></i>
+              @if(sidebarExpanded){
+                <span class="nav-label">Cuentas</span>
+              }
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    }
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <i class="pi pi-shield"></i>
+          <span>Banco Bogotá</span>
+        </div>
+        <p>&copy; 2026 Banco Bogotá. Todos los derechos reservados.</p>
+      </div>
+      <div class="footer-right">
+        <a href="#" class="footer-link">
+          <i class="pi pi-file"></i>
+          Términos y Condiciones
+        </a>
+        <span class="separator">|</span>
+        <a href="#" class="footer-link">
+          <i class="pi pi-shield"></i>
+          Política de Privacidad
+        </a>
+        <span class="separator">|</span>
+        <a href="#" class="footer-link">
+          <i class="pi pi-phone"></i>
+          Contacto
+        </a>
+      </div>
+    </div>
+  </footer>
+</div>

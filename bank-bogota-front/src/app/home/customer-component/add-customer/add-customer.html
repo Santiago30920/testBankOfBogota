@@ -1,0 +1,117 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <div class="modal-title">
+      <mat-icon class="modal-icon">person_add</mat-icon>
+      <h2>Registrar Nuevo Cliente</h2>
+    </div>
+    <button mat-icon-button (click)="onCancel()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="modal-content">
+    <form [formGroup]="customerForm" class="customer-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tipo de Documento</mat-label>
+          <mat-select formControlName="documentType">
+            @for(type of documentTypes; track type){
+                <mat-option [value]="type">
+                  {{ getDocumentTypeLabel(type) }}
+                </mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-error *ngIf="customerForm.get('documentType')?.hasError('required')">
+            El tipo de documento es requerido
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Número de Documento</mat-label>
+          <input 
+            matInput 
+            formControlName="documentNumber" 
+            placeholder="Ej: 1234567890"
+            maxlength="15">
+          <mat-icon matPrefix>credit_card</mat-icon>
+          @if(customerForm.get('documentNumber')?.hasError('required')){
+              <mat-error >
+                El número de documento es requerido
+              </mat-error>
+          }
+          @if(customerForm.get('documentNumber')?.hasError('pattern')){
+              <mat-error>
+                Debe contener solo números (6-15 dígitos)
+              </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre Completo</mat-label>
+          <input 
+            matInput 
+            formControlName="fullName" 
+            placeholder="Ej: Juan Pérez García">
+          <mat-icon matPrefix>person</mat-icon>
+          @if(customerForm.get('fullName')?.hasError('required')){
+              <mat-error>
+                El nombre completo es requerido
+              </mat-error>
+          }
+          @if(customerForm.get('fullName')?.hasError('minlength')){
+              <mat-error >
+                Debe tener al menos 3 caracteres
+              </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo Electrónico</mat-label>
+          <input 
+            matInput 
+            type="email" 
+            formControlName="email" 
+            placeholder="Ej: juan@example.com">
+          <mat-icon matPrefix>email</mat-icon>
+          @if(customerForm.get('email')?.hasError('required')){
+              <mat-error >
+                El correo electrónico es requerido
+              </mat-error>
+          }
+          @if(customerForm.get('email')?.hasError('email')){
+              <mat-error>
+                Ingrese un correo electrónico válido
+              </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="modal-actions">
+    <button 
+      mat-stroked-button 
+      type="button" 
+      (click)="onCancel()"
+      class="cancel-button">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button 
+      mat-raised-button 
+      type="button" 
+      (click)="onSubmit()"
+      [disabled]="!customerForm.valid"
+      class="submit-button">
+      <mat-icon>save</mat-icon>
+      Registrar Cliente
+    </button>
+  </mat-dialog-actions>
+</div>

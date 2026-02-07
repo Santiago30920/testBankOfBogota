@@ -1,0 +1,137 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="customer-container">
+  <!-- Header Section -->
+  <div class="section-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="pi pi-users header-icon"></i>
+        <div>
+          <h2>Gestión de Clientes</h2>
+          <p class="section-description">Administra la información de los clientes del banco</p>
+        </div>
+      </div>
+      <button 
+        pButton 
+        type="button" 
+        label="Nuevo Cliente" 
+        icon="pi pi-plus"
+        class="p-button-rounded"
+        (click)="openAddCustomerModal()"
+        [disabled]="loading">
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <p-card class="table-card">
+    <ng-template pTemplate="header">
+      <div class="card-header-custom">
+        <i class="pi pi-list"></i>
+        <span>Lista de Clientes</span>
+      </div>
+    </ng-template>
+
+    <p-table 
+      #dt
+      [value]="customers" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} clientes"
+      [rowsPerPageOptions]="[5, 10, 15]"
+      [globalFilterFields]="['fullName', 'documentNumber', 'email']"
+      scrollable="scroll"
+      styleClass="p-datatable-striped">
+      
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input 
+              pInputText 
+              type="text" 
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')" 
+              placeholder="Buscar cliente..." 
+              class="search-input"/>
+          </span>
+          <button 
+            pButton 
+            type="button" 
+            icon="pi pi-refresh" 
+            class="p-button-text"
+            (click)="loadCustomers()"
+            pTooltip="Recargar"
+            tooltipPosition="bottom">
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="fullName">
+            Nombre Completo 
+            <p-sortIcon field="fullName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="documentType">
+            Tipo Documento
+            <p-sortIcon field="documentType"></p-sortIcon>
+          </th>
+          <th pSortableColumn="documentNumber">
+            Número Documento
+            <p-sortIcon field="documentNumber"></p-sortIcon>
+          </th>
+          <th pSortableColumn="email">
+            Correo Electrónico
+            <p-sortIcon field="email"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>
+            <div class="customer-name">
+              <i class="pi pi-user-edit"></i>
+              <span>{{ customer.fullName }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="document-badge">
+              {{ getDocumentTypeLabel(customer.documentType) }}
+            </span>
+          </td>
+          <td>
+            <span class="document-number">{{ customer.documentNumber }}</span>
+          </td>
+          <td>
+            <div class="email-cell">
+              <i class="pi pi-envelope"></i>
+              <span>{{ customer.email }}</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="empty-message">
+            <div class="empty-state"> 
+              <i class="pi pi-inbox empty-icon"></i>
+              <p>No hay clientes registrados</p>
+              <button
+                pButton 
+                type="button" 
+                label="Registrar primer cliente" 
+                icon="pi pi-plus"
+                class="p-button-outlined"
+                (click)="openAddCustomerModal()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
