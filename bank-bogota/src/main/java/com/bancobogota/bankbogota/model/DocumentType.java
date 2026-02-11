@@ -5,7 +5,9 @@ package com.bancobogota.bankbogota.model;
  * CC = Cédula de Ciudadanía
  * CE = Cédula de Extranjería
  * PAS = Pasaporte
+ * NIT = Nit
+ * TI = Tarjeta de Identidad
  */
 public enum DocumentType {
-    CC, CE, PAS
+    CC, CE, PAS, NIT, TI
 }

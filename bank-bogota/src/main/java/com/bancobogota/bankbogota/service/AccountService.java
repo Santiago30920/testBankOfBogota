@@ -63,7 +63,10 @@ public class AccountService {
         Account account = new Account();
         account.setCustomerId(customerId);
         account.setAccountNumber(generateAccountNumber());
-        account.setStatus(AccountStatus.ACTIVE);
+        
+        // Usar el status del request, o ACTIVE por defecto si no se especifica
+        AccountStatus status = request.getStatus() != null ? request.getStatus() : AccountStatus.ACTIVE;
+        account.setStatus(status);
 
         return accountRepository.save(account);
     }
@@ -93,5 +96,31 @@ public class AccountService {
         Random random = new Random();
         long number = 1000000000L + (long)(random.nextDouble() * 9000000000L);
         return String.valueOf(number);
+    }
+
+    /**
+     * Elimina todas las cuentas asociadas a un cliente.
+     * @param customerId ID del cliente
+     */
+    public void deleteAccountsByCustomerId(String customerId) {
+        List<Account> accounts = accountRepository.findByCustomerId(customerId);
+        if (!accounts.isEmpty()) {
+            accountRepository.deleteAll(accounts);
+        }
+    }
+
+    /**
+     * Elimina una cuenta por su ID.
+     * @param accountId ID de la cuenta a eliminar
+     */
+    public void deleteAccount(String accountId) {
+        if (accountId == null || accountId.isEmpty()) {
+            throw new BusinessException("El id de la cuenta no puede ser nulo o vacío");
+        }
+        
+        if (!accountRepository.existsById(accountId)) {
+            throw new BusinessException("Cuenta no encontrada con id: " + accountId);
+        }
+        accountRepository.deleteById(accountId);
     }
 }

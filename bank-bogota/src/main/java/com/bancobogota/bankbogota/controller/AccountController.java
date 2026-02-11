@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +72,22 @@ public class AccountController {
         response.put("message", "Cuentas obtenidas exitosamente");
         response.put("data", accounts);
         response.put("total", accounts.size());
+        
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Elimina una cuenta.
+     * @param id ID de la cuenta a eliminar
+     * @return ResponseEntity con mensaje de confirmación
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteAccount(@PathVariable String id) {
+        accountService.deleteAccount(id);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", "Cuenta eliminada exitosamente");
         
         return ResponseEntity.ok(response);
     }
